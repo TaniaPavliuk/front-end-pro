@@ -1,75 +1,112 @@
-for (let i = 10; i <= 25; i = i + 0.5) {
-    console.log(i)
-}
-
-const userInput = prompt('Input the number');
-const userNumber = Number(userInput);
-let isPrime = true;
-for (let i = 2; i < userNumber; i++) {
-    if (userNumber % i === 0) {
-        isPrime = false;
-        break;
+const minNumber = (firstNumber, secondNumber, thirdNumber, fourthNumber) => {
+    if (typeof (firstNumber && secondNumber && thirdNumber && fourthNumber) === "string") {
+      firstNumber = Number(firstNumber);
+      secondNumber = Number(secondNumber);
+      thirdNumber = Number(thirdNumber);
+      fourthNumber = Number(fourthNumber);
     }
-}
-if (isPrime === true) {
-    console.log('It`s a prime number!');
-} else {
-    console.log('It`s not a prime number!');
-}
-
-const userCheck = Number(prompt('Please enter the amount of purchase'));
-let discount = 0;
-if (userCheck < 100) {
-    discount = 3;
-} else if (userCheck < 200) {
-    discount = 5;
-} else {
-    discount = 7;
-}
-console.log(`Your discount is ${userCheck / 100 * discount}uah`);
-
-for (let i = 2; i <= 9; i++) {
-    for (let j = 2; j <= 9; j++) {
-        console.log(`${j} * ${i} = `, j * i);
+    if (typeof (firstNumber && secondNumber && thirdNumber && fourthNumber) === "number") {
+      // console.log(Math.min(firstNumber, secondNumber, thirdNumber, fourthNumber));
+      return Math.min(firstNumber, secondNumber, thirdNumber, fourthNumber);
+    } else {
+      // console.log("Wrong number!");
+      return "Something went wrong! There is no minimum number!";
     }
-}
-
-const rate = 36.76;
-for (let i = 10; i <= 100; i = i + 10) {
-    const currency = i * rate;
-    console.log(`${i} USD = ${currency.toFixed(2)} UAH`);
-}
-
-const numbers = prompt('Please enter fifteen numbers devided by space!');
-const arrayNumbers = numbers.split(' ');
-let positiveNumbers = 0;
-let negativeNumbers = 0;
-let zeroNumbers = 0;
-let evenNumbers = 0;
-let oddNumbers = 0;
-for (let i = 0; i < arrayNumbers.length; i++) {
-    const currentElement = Number(arrayNumbers[i]);
-    if (currentElement > 0) {
-        positiveNumbers++
+  };
+  minNumber("6", 8, null, "-1");
+  
+  const greatestCommonDivider = (x, y) => {
+    if (typeof (x && y) === "string") {
+      x = Number(x);
+      y = Number(y);
     }
-    if (currentElement < 0) {
-        negativeNumbers++
+    if (typeof x !== "number" || typeof y !== "number") {
+      // console.log("Wrong action!");
+      return "Something went wrong!";
+    } else {
+      x = Math.abs(x);
+      y = Math.abs(y);
+      while (y) {
+        let t = y;
+        y = x % y;
+        x = t;
+      }
+      // console.log(x);
+      return x;
     }
-    if (currentElement === 0) {
-        zeroNumbers++
+  };
+  
+  greatestCommonDivider("8", "22");
+  
+  const isPerfect = (number1) => {
+    if (typeof num1 === "string") {
+      number1 = Number(num1);
     }
-    if (currentElement % 2 === 0) {
-        evenNumbers++
+    if (typeof number1 === "number") {
+      let temperature = 0;
+      for (let i = 1; i <= number1 / 2; i++) {
+        if (number1 % i === 0) {
+            temperature += i;
+        }
+      }
+      if (temperature === number1 && temperature !== 0) {
+        // console.log(true);
+        return true;
+      } else {
+        // console.log(false);
+        return false;
+      }
+    } else {
+      // console.log("Error");
+      return "Unknown error. Please try again later!";
     }
-    if (currentElement % 2 !== 0) {
-        oddNumbers++
+  };
+  isPerfect("28");
+  
+  const sumTo = (numberOne, numberTwo) => {
+    if (typeof (numberOne && numberTwo) === "string") {
+      numberOne = Number(numberOne);
+      numberTwo = Number(numberTwo);
     }
-}
-console.log(`There are ${positiveNumbers} positive numbers`);
-console.log(`There are ${negativeNumbers} negative numbers`);
-console.log(`There are ${zeroNumbers} zero numbers`);
-console.log(`There are ${evenNumbers} even numbers`);
-console.log(`There are ${oddNumbers} odd numbers`);
+    if (typeof (numberOne && numberTwo) === "number") {
+      let sum = 0;
+      for (let i = numberOne; i <= numberTwo; i++) {
+        sum += i;
+      }
+      // console.log(sum);
+      return sum;
+    } else {
+      // console.log("Error");
+      return "Unknown error. Please try again later!";
+    }
+  };
+  sumTo("1", "3");
+  
+  const convertCtoF = (celsius) => {
+    if (typeof celsius === "string") {
+      celsius = Number(celsius);
+    }
+    if (typeof celsius === "number") {
+      // console.log(celsius * (9 / 5) + 32);
+      return celsius * (9 / 5) + 32;
+    } else {
+      return "Unknown error. Please try again later!";
+    }
+  };
+  convertCtoF("22");
+  
+  const getRandomNumber = (min, max) => {
+    min = 0;
+    max = 40;
+    if (typeof (min && max) === "number") {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      // console.log(Math.floor(Math.random() * (max - min + 1)) + min);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    } else {
+      // console.log("error");
+      return "Unknown error. Please try again later!";
+    }
+  };
 
-
-
+  getRandomNumber();
