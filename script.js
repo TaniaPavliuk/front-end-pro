@@ -120,8 +120,7 @@ const validateValue = (value) => {
   ];
   
   // 4.1
-  
-  const positiveArrayNumbers = positiveArrayNumbers.filter((number) => number >= 0);
+  const positiveArrayNumbers = arrayNumbers.filter((number) => number >= 0);
   const totalAmount = positiveArrayNumbers.reduce((sum, number) => sum + number);
   console.log(`The sum is ${positiveArrayNumbers.length} the amount of elements is ${totalAmount}`);
   
