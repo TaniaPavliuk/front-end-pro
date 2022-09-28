@@ -1,164 +1,170 @@
-//1
-const createTeam = (teamName, driverName, birthYear, car, sponsor, isAvailableDriver) => {
-    const team = {
-        teamName,
-        driverName,
-        birthYear,
-        car,
-        sponsor,
-        isAvailableDriver
-    };
-    return team
-}
-const myFirstTeam = createTeam('Rolling Stones', 'Ken Block', '1984', 'Ford', 'Red Bull', true)
-//console.log(myFirstTeam)
-
-//2
-const createNewUser = () => {
-    const userNew = {
-      login: "",
-      password: "",
-      city: "",
-      country: "",
-      gender: "",
-      age: "",
-    };
+const validateValue = (value) => {
+    if (value === undefined || value === null) {
+      return;
+    }
+    return value;
+  };
+  const emptyValue = "This value is not correct";
   
-    for (const [key] of Object.entries(userNew)) {
-      let result = prompt([key]);
-      if (result === null || result === "") {
-        userNew[key] = EMPTY_VALUE;
-      } else {
-        userNew[key] = result;
+  //1 
+  const sampleArray = [];
+  
+  for (let i = 1; i < 2; i++) {
+    const lengthOfArray = +prompt(
+      "Enter the number from 1 to 10 to define a length of array"
+    );
+    if (isNaN(lengthOfArray) || lengthOfArray > 10) {
+      i--;
+    } else {
+      for (let i = 1; i <= lengthOfArray; i++) {
+        const userValue = +prompt(`Enter a numeric value №${i}`);
+        if (!isNaN(userValue)) {
+          sampleArray.push(userValue);
+        } else {
+          i--;
+        }
       }
     }
-    return userNew;
+  }
+  
+  console.log(sampleArray);
+  const sortedSampleArray = sampleArray.sort((a, b) => a - b);
+  
+  console.log(sortedSampleArray);
+  
+  //3
+  
+  const productsList = [
+    { productName: "bread", productPrice: 14.5, productQuantity: 2 },
+    { productName: "watermalon", productPrice: 53.5, productQuantity: 2 },
+    { productName: "potatoes", productPrice: 70.3, productQuantity: 4 },
+    { productName: "onion", productPrice: 10.6, productQuantity: 3 },
+    { productName: "peach", productPrice: 120.2, productQuantity: 7 },
+    { productName: "olives", productPrice: 61.4, productQuantity: 5 },
+  ];
+  
+  // 3.1 
+  const totalProductPrice = productsList.reduce(
+    (sum, price) => sum + price.productPrice * price.productQuantity,
+    0
+  );
+  console.log(`Total check: ${totalProductPrice}`);
+  
+  // 3.2
+  const minQuantity = productsList.sort(
+    (el1, el2) => el1.productQuantity - el2.productQuantity
+  )[0];
+  console.log(
+    `The least of all ${minQuantity.productName}: ${minQuantity.productQuantity} items`
+  );
+  
+  // 3.3 
+  const totalProductQuantity = productsList.reduce(
+    (sum, quantity) => sum + quantity.productQuantity,
+    0
+  );
+  console.log(`Total quantity: ${totalProductQuantity}`);
+  
+  // 3.4 
+  const mostExpensiveProduct = productsList.sort(
+    (el1, el2) => el2.productPrice - el1.productPrice
+  )[0];
+  console.log(
+    `The most expensive product is: ${mostExpensiveProduct.productName}, it costs ${mostExpensiveProduct.productPrice}`
+  );
+  
+  // 3.5 
+  const newOneProduct = () => {
+    const newProduct = {
+      productName: "",
+      productPrice: 0,
+      productQuantity: 0,
+    };
+      
+    for (let key in newProduct) {
+      const value = prompt(key);
+  
+      if (!validateValue(value) && key === "productName") {
+        newProuct[key] = emptyValue;
+      } else if (key === "productPrice" || key === "productQuantity") {
+        newProduct[key] = Math.abs(value) ? Math.abs(value) : 0;
+      } else {
+        newProduct[key] = value;
+      }
+    }
+    productsList.push(newProduct);
+    return productsList;
   };
-  const newUser = createNewUser();
-
-const userLogin = prompt('Enter your login.');
-const userPassword = prompt('Enter your password.');
-const userCity = prompt('Enter your city.');
-const userCountry = prompt('Enter your country.');
-const userGender = prompt('Enter your gender.');
-const userAge = prompt('Enter your age.');
-const userData = {
-    userLogin,
-    userPassword,
-    userCity,
-    userCountry,
-    userGender,
-    userAge
-};
-
-const user2Login = prompt('Enter your login.');
-const user2Password = prompt('Enter your password.');
-const user2City = prompt('Enter your city.');
-const user2Country = prompt('Enter your country.');
-const user2Gender = prompt('Enter your gender.');
-const user2Age = prompt('Enter your age.');
-const userData2 = {
-    userLogin: user2Login,
-    userPassword: user2Password,
-    userCity: user2City,
-    userCountry: user2Country,
-    userGender: user2Gender,
-    userAge: user2Age
-};
-
-//3
-const changeUserData = (user, key, value) => {
-    user[key] = value
-}
-
-changeUserData(userData, 'userCity', 'Kherson')
-console.log(userData)
-changeUserData(userData2, 'userAge', '12')
-console.log(userData2)
-
-//4
-const student = {
-    studentName: 'Steve',
-    studentSurname: 'Sad',
-    studentAge: 18,
-    studentCourse: 3,
-    studentCity: 'Washington',
-    addHomework: () => {
-        console.log('Sending my howework... Please, wait');
-    },
-    greeting: () => {
-        console.log('Hi everyone!');
-    }
-}
-student.greeting();
-student.addHomework();
-
-//5
-const isEmpty = (obj) => {
-    const keys = Object.keys(obj);
-    if (keys.length === 0) {
-        return true
-    } else {
-        return false
-    }
-}
-
-//6
-const teamProceeds = {
-    Taras: 2000,
-    Marta: 10,
-    Ivan: 1200,
-    Petro: 400,
-    Roma: 366,
-    Alina: 829
-}
-
-//7
-const calculateSum = (obj) => {
-    const proceedsArray = Object.values(obj);
-    const callback = (proceed, sum) => {
-        const currentSum = proceed + sum;
-        return currentSum;
-    }
-    const result = proceedsArray.reduce(callback, 0);
-    return result;
-}
-console.log(calculateSum(teamProceeds));
-
-//8
-const calculateMin = (obj) => {
-    const proceedsArray = Object.entries(obj);
-    const callback = (proceed, min) => {
-        if (proceed[1] < min[1]) {
-            return proceed
-        } else {
-            return min
-        }   
-    }
-    const result = proceedsArray.reduce(callback, proceedsArray[0]);
-    return result[0];
-}
-console.log(calculateMin(teamProceeds));
-
-//9
-const calculateMax = (obj) => {
-    const proceedsArray = Object.entries(obj);
-    const callback = (proceed, max) => {
-        if (proceed[1] > max[1]) {
-            return proceed
-        } else {
-            return max
-        }   
-    }
-    const result = proceedsArray.reduce(callback, proceedsArray[0]);
-    return result[0];
-}
-console.log(calculateMax(teamProceeds));
-
-//10
-const calculateRandom = (obj) => {
-    const teamProceedsArray = Object.entries(obj);
-    const randomIndex = Math.floor(Math.random() * teamProceedsArray.length);
-    return teamProceedsArray[randomIndex][0]
-}
-console.log(`The employee of the month is ${calculateRandom(teamProceeds)}`);
+  newOneProduct();
+  console.log(productsList);
+  
+  // 3.6 
+  const deleteProduct = () => {
+    const productValue = prompt("Enter the name of product which you want to delete");
+    if (validateValue(productValue)) {
+      const indexOfElement = productsList.findIndex(
+        (el) => el.productName === productValue
+      );
+      if (indexOfElement === -1) return "Wrong name! There are no such products.";
+      productsList.splice(indexOfElement, 1);
+      return productsList;
+    } else return "Ok";
+  };
+  
+  deleteProduct();
+  
+  //4
+  const arrayNumbers = [
+    16, -3, 54, -4, -72, -56, 47, -12, 4, -16, 25, -37, 46, 4, -51, 27, -8, 4,
+    -54, 76, -4, 12, 6, -35,
+  ];
+  
+  // 4.1
+  
+  const positiveArrayNumbers = positiveArrayNumbers.filter((number) => number >= 0);
+  const totalAmount = positiveArrayNumbers.reduce((sum, number) => sum + number);
+  console.log(`The sum is ${positiveArrayNumbers.length} the amount of elements is ${totalAmount}`);
+  
+  //4.2
+  const minElementValue = Math.min(...arrayNumbers);
+  const indexMinElement = arrayNumbers.findIndex(
+    (element) => element === minElementValue
+  );
+  console.log(
+    `The minimal elemetn is ${minElementValue}, the number of element is ${indexMinElement}`
+  );
+  
+  //4.3
+  const maxElementValue = Math.max(...arrayNumbers);
+  const indexMaxElement = arrayNumbers.findIndex(
+    (element) => element === maxElementValue
+  );
+  console.log(
+    `The maximal element is ${maxElementValue}, the number of element is ${indexMaxElement}`
+  );
+  
+  //4.4 
+  const negativeArrayNumbers = arrayNumbers.filter((number) => number < 0);
+  console.log(`The quantity of negative numbers is ${negativeArrayNumbers.length}`);
+  
+  //4.5
+  const notEvenArrayNumbers = positiveArrayNumbers.filter(
+    (number) => number % 2 !== 0
+  );
+  console.log(`The quantity of not even numbers is ${notEvenArrayNumbers.length}`);
+  
+  //4.6
+  const evenArrayNumbers = positiveArrayNumbers.filter(
+    (number) => number % 2 === 0
+  );
+  const totalAmountOfEvenNumbers = evenArrayNumbers.reduce(
+    (sum, number) => sum + number
+  );
+  console.log(`Sum of even elements: ${totalAmountOfEvenNumbers}`);
+  
+  //4.7
+  const multiplyEvenNumbers = positiveArrayNumbers.reduce(
+    (number1, number2) => number1 * number2,
+    1
+  );
+  console.log(`The multiply of positive elements is ${multiplyEvenNumbers}`);
