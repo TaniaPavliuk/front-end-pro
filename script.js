@@ -1,237 +1,257 @@
-/* eslint-disable max-classes-per-file */
-const MIN_CAPACITY_REDUCTION = 0.1;
-const MAX_CAPACITY_REDUCTION = 2.5;
-const INITIAL_CAPACITY = 100;
+const products = [
+  {
+    productName: 'bread',
+    productData: {
+      weight: 200,
+      certificate: true,
+      date0fExpiry: '21/10/2022',
+      sugarFree: true,
+    },
+    productProvider: 'FOP Skyba R.R.',
+    productCountry: 'https://www.worldometers.info/img/flags/ar-flag.gif',
+    productPrice: 9.75,
+  },
+  {
+    productName: 'butter',
+    productData: {
+      weight: 100,
+      certificate: false,
+      date0fExpiry: '21/10/2022',
+      sugarFree: false,
+    },
+    productProvider: 'FOP UK Milk',
+    productCountry: 'https://www.worldometers.info/img/flags/af-flag.gif',
+    productPrice: 11.7,
+  },
+  {
+    productName: 'mango',
+    productData: {
+      weight: 400,
+      certificate: false,
+      date0fExpiry: '30/12/2022',
+      sugarFree: true,
+    },
+    productProvider: 'FOP Fruits&Goods',
+    productCountry: 'https://www.worldometers.info/img/flags/au-flag.gif',
+    productPrice: 50.6,
+  },
+  {
+    productName: 'banana',
+    productData: {
+      weight: 1000,
+      certificate: false,
+      date0fExpiry: '17/11/2022',
+      sugarFree: false,
+    },
+    productProvider: 'FOP Eco Family',
+    productCountry:
+      'https://www.worldometers.info/img/flags/small/tn_bb-flag.gif',
+    productPrice: 27.9,
+  },
+  {
+    productName: 'oranges',
+    productData: {
+      weight: 300,
+      certificate: true,
+      date0fExpiry: '01/02/2023',
+      sugarFree: true,
+    },
+    productProvider: 'FOP Eco Farm',
+    productCountry: 'https://www.worldometers.info/img/flags/sp-flag.gif',
+    productPrice: 10.2,
+  },
+  {
+    productName: 'onion',
+    productData: {
+      weight: 260,
+      certificate: true,
+      date0fExpiry: '23/01/2023',
+      sugarFree: false,
+    },
+    productProvider: 'FOP Vegan',
+    productCountry:
+      'https://www.worldometers.info/img/flags/small/tn_co-flag.gif',
+    productPrice: 10.15,
+  },
+  {
+    productName: 'potato',
+    productData: {
+      weight: 10,
+      certificate: false,
+      date0fExpiry: '21/10/2022',
+      sugarFree: false,
+    },
+    productProvider: 'FOP LukashenkoSuka',
+    productCountry: 'https://www.worldometers.info/img/flags/bo-flag.gif',
+    productPrice: 0.01,
+  },
+  {
+    productName: 'wheat',
+    productData: {
+      weight: 200,
+      certificate: true,
+      date0fExpiry: '22/10/2023',
+      sugarFree: true,
+    },
+    productProvider: 'FOP SystemProd',
+    productCountry: 'https://www.worldometers.info/img/flags/up-flag.gif',
+    productPrice: 16.25,
+  },
+  {
+    productName: 'beef',
+    productData: {
+      weight: 700,
+      certificate: true,
+      date0fExpiry: '27/10/2022',
+      sugarFree: false,
+    },
+    productProvider: 'FOP Meat Factory',
+    productCountry:
+      'https://www.worldometers.info/img/flags/small/tn_gm-flag.gif',
+    productPrice: 100.75,
+  },
+  {
+    productName: 'beer',
+    productData: {
+      weight: 1000,
+      certificate: true,
+      date0fExpiry: '21/10/2022',
+      sugarFree: false,
+    },
+    productProvider: 'FOP Budweiser',
+    productCountry: 'https://www.worldometers.info/img/flags/ez-flag.gif',
+    productPrice: 12.0,
+  },
+  {
+    productName: 'olives',
+    productData: {
+      weight: 50,
+      certificate: true,
+      date0fExpiry: '21/10/2022',
+      sugarFree: false,
+    },
+    productProvider: 'FOP Greko',
+    productCountry: 'https://www.worldometers.info/img/flags/gr-flag.gif',
+    productPrice: 13.75,
+  },
+  {
+    productName: 'salmon',
+    productData: {
+      weight: 900,
+      certificate: true,
+      date0fExpiry: '27/11/2022',
+      sugarFree: false,
+    },
+    productProvider: 'FOP Old and Sea',
+    productCountry:
+      'https://www.worldometers.info/img/flags/small/tn_sp-flag.gif',
+    productPrice: 20.85,
+  },
+  {
+    productName: 'salt',
+    productData: {
+      weight: 10000,
+      certificate: false,
+      date0fExpiry: '21/10/2022',
+      sugarFree: false,
+    },
+    productProvider: 'FOP Escobar',
+    productCountry: 'https://www.worldometers.info/img/flags/co-flag.gif',
+    productPrice: 200.65,
+  },
+  {
+    productName: 'eggs',
+    productData: {
+      weight: 300,
+      certificate: true,
+      date0fExpiry: '01/01/2023',
+      sugarFree: true,
+    },
+    productProvider: 'FOP Eggs Market',
+    productCountry:
+      'https://www.worldometers.info/img/flags/small/tn_up-flag.gif',
+    productPrice: 70.75,
+  },
+  {
+    productName: 'gorilka',
+    productData: {
+      weight: 200,
+      certificate: true,
+      date0fExpiry: '21/10/2022',
+      sugarFree: false,
+    },
+    productProvider: 'FOP Finlandia',
+    productCountry: 'https://www.worldometers.info/img/flags/fi-flag.gif',
+    productPrice: 150.5,
+  },
+];
 
-function getRandomCapacity() {
-  return (
-    Math.random() * MAX_CAPACITY_REDUCTION +
-    MIN_CAPACITY_REDUCTION
-  ).toFixed(1);
+const rootElement = document.getElementById('root');
+const listElement = document.createElement('ul');
+
+listElement.classList.add('products-list');
+
+function renderProduct(product) {
+  const listItemElement = document.createElement('li');
+  const productDescriptionElement = document.createElement('p');
+  const productCountryElement = document.createElement('img');
+
+  listItemElement.classList.add('list-item');
+  if (!product.productData.certificate) {
+    listItemElement.classList.add('uncertified');
+  }
+  productDescriptionElement.innerText = `${product.productName} - ${
+    product.productData.weight
+  }kg, Expiration ${product.productData.date0fExpiry}, Provider "${
+    product.productProvider
+  }", Price ${product.productPrice} UAH${
+    product.productData.sugarFree ? ', Sugar free' : ''
+  } `;
+  productCountryElement.src = product.productCountry;
+
+  listItemElement.appendChild(productDescriptionElement);
+  listItemElement.appendChild(productCountryElement);
+
+  listElement.appendChild(listItemElement);
 }
 
-class Car {
-  constructor(
-    fuelConsumption,
-    engineType,
-    engineVolume,
-    model,
-    yearOfProduction,
-    weight
-  ) {
-    this.fuelConsumption = fuelConsumption;
-    this.engineType = engineType;
-    this.engineVolume = engineVolume;
-    this.model = model;
-    this.yearOfProduction = yearOfProduction;
-    this.weight = weight;
-    this.isAvailable = true;
-    this.capacity = INITIAL_CAPACITY;
-  }
+products.forEach(renderProduct);
 
-  startDrive() {
-    if (this.isAvailable === true) {
-      const newCapacity = this.capacity - getRandomCapacity();
-      if (newCapacity > 0) {
-        this.isAvailable = false;
-        this.capacity = newCapacity;
-        console.log(`Let's drive ${this.model}!`);
-      } else {
-        console.log('Car has no capacity!');
-      }
-    } else {
-      console.log('Car is not available!');
-    }
-  }
+rootElement.appendChild(listElement);
 
-  stopDrive() {
-    if (this.isAvailable === false) {
-      this.isAvailable = true;
-      console.log(`Stop Drive ${this.model}!`);
-    }
-  }
+function calculateTotal(currentSum, product) {
+  return currentSum + product.productPrice;
 }
 
-class Wagon extends Car {}
+const total = products.reduce(calculateTotal, 0);
 
-class Sedan extends Car {}
-
-class Hatchback extends Car {}
-
-function getPriceByYear(carYear, vehicleType) {
-  switch (vehicleType) {
-    case 'hatchback':
-      if (carYear >= 2019) {
-        return 1.2;
-      }
-      if (carYear >= 2010 && carYear <= 2018) {
-        return 1.4;
-      }
-      if (carYear >= 2000 && carYear <= 2009) {
-        return 1.7;
-      }
-      if (carYear >= 1990 && carYear <= 1999) {
-        return 2;
-      }
-      break;
-    case 'sedan':
-      if (carYear >= 2019) {
-        return 1.5;
-      }
-      if (carYear >= 2010 && carYear <= 2018) {
-        return 1.8;
-      }
-      if (carYear >= 2000 && carYear <= 2009) {
-        return 2;
-      }
-      if (carYear >= 1990 && carYear <= 1999) {
-        return 2.6;
-      }
-      break;
-    case 'wagon':
-      if (carYear >= 2019) {
-        return 2;
-      }
-      if (carYear >= 2010 && carYear <= 2018) {
-        return 2.2;
-      }
-      if (carYear >= 2000 && carYear <= 2009) {
-        return 2.5;
-      }
-      if (carYear >= 1990 && carYear <= 1999) {
-        return 3;
-      }
-      break;
-    default:
-      console.log('invalid year!');
+function calculateMax(currentMax, product) {
+  if (currentMax.productPrice > product.productPrice) {
+    return currentMax;
   }
+  return product;
 }
 
-function getPriceByEngineType(engineType, vehicleType) {
-  switch (vehicleType) {
-    case 'hatchback':
-      if (engineType === 'diesel') {
-        return 2.2;
-      }
-      if (engineType === 'petrol') {
-        return 1.8;
-      }
-      break;
-    case 'sedan':
-      if (engineType === 'diesel') {
-        return 2.5;
-      }
-      if (engineType === 'petrol') {
-        return 2;
-      }
-      break;
-    case 'wagon':
-      if (engineType === 'diesel') {
-        return 2.9;
-      }
-      if (engineType === 'petrol') {
-        return 2.4;
-      }
-      break;
-    default:
-      console.log('invalid type of engine!');
-  }
-}
+const mostExpenciveProduct = products.reduce(calculateMax);
 
-function getPriceByWeight(weight, vehicleType) {
-  switch (vehicleType) {
-    case 'hatchback':
-      if (weight >= 800 && weight <= 1100) {
-        return 1.5;
-      }
-      if (weight >= 1101 && weight <= 1400) {
-        return 1.7;
-      }
-      if (weight >= 1401) {
-        return 2;
-      }
-      break;
-    case 'sedan':
-      if (weight >= 800 && weight <= 1100) {
-        return 1.6;
-      }
-      if (weight >= 1101 && weight <= 1400) {
-        return 1.8;
-      }
-      if (weight >= 1401) {
-        return 2.1;
-      }
-      break;
-    case 'wagon':
-      if (weight >= 800 && weight <= 1100) {
-        return 1.7;
-      }
-      if (weight >= 1101 && weight <= 1400) {
-        return 1.9;
-      }
-      if (weight >= 1401) {
-        return 2.2;
-      }
-      break;
-    default:
-      console.log('invalid weight!');
-  }
-}
+const averagePrice = total / products.length;
 
-function service(vehicle) {
-  let priceIndex = 0;
-  let indices = 0;
-  let finalPrice = 0;
+const totalElement = document.createElement('p');
+const mostExpensiveProductElement = document.createElement('p');
+const averagePriceElement = document.createElement('p');
 
-  if (vehicle.yearOfProduction < 1990) {
-    console.log('too old');
-    return;
-  }
+totalElement.innerText = `Final price: ${total.toFixed(2)} UAH`;
 
-  if (vehicle.yearOfProduction < 800) {
-    console.log('too light');
-    return;
-  }
+mostExpensiveProductElement.innerText = `Most expensive product: ${
+  mostExpenciveProduct.productName
+} - ${mostExpenciveProduct.productData.weight}kg, Expiration ${
+  mostExpenciveProduct.productData.date0fExpiry
+}, Provider "${mostExpenciveProduct.productProvider}", Price ${
+  mostExpenciveProduct.productPrice
+} UAH${mostExpenciveProduct.productData.sugarFree ? ', Sugar free' : ''} `;
 
-  if (vehicle instanceof Wagon) {
-    priceIndex = 130;
-    indices += getPriceByYear(vehicle.yearOfProduction, 'wagon');
-    indices += getPriceByEngineType(vehicle.engineType, 'wagon');
-    indices += getPriceByWeight(vehicle.weight, 'wagon');
-  }
-  if (vehicle instanceof Sedan) {
-    priceIndex = 125;
-    indices += getPriceByYear(vehicle.yearOfProduction, 'sedan');
-    indices += getPriceByEngineType(vehicle.engineType, 'sedan');
-    indices += getPriceByWeight(vehicle.weight, 'sedan');
-  }
-  if (vehicle instanceof Hatchback) {
-    priceIndex = 110;
-    indices += getPriceByYear(vehicle.yearOfProduction, 'hatchback');
-    indices += getPriceByEngineType(vehicle.engineType, 'hatchback');
-    indices += getPriceByWeight(vehicle.weight, 'hatchback');
-  }
+averagePriceElement.innerText = `Average price: ${averagePrice.toFixed(2)} UAH`;
 
-  console.log(
-    `car was wrecked by: ${(INITIAL_CAPACITY - vehicle.capacity).toFixed(2)}`
-  );
-
-  finalPrice = indices * priceIndex * 0.1;
-  return finalPrice;
-}
-
-const honda = new Sedan(7.7, 'petrol', 2.0, 'Honda Accord', 2014, 1500);
-honda.startDrive();
-honda.stopDrive();
-
-const priceForHonda = service(honda);
-console.log(priceForHonda);
-
-// const bmw = new Car(9.0, "petrol", 3.0, "BMW 520i", 2018, 1600);
-// bmw.startDrive();
-// bmw.stopDrive();
-// bmw.startDrive();
-// bmw.startDrive();
-// const audi = new Car(8.1, "diesel", 2.5, "Audi Q7", 2019, 3000);
-// audi.startDrive();
-// audi.stopDrive();
+rootElement.appendChild(totalElement);
+rootElement.appendChild(mostExpensiveProductElement);
+rootElement.appendChild(averagePriceElement);
