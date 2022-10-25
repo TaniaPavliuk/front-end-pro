@@ -1,0 +1,23 @@
+.list-item {
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .list-item:nth-child(even) {
+    color: white;
+    background-color: lightgray;
+  }
+  
+  .list-item img {
+    width: 50px;
+  }
+  
+  .list-item.uncertified p:after {
+    font-size: 24px;
+    content: "!";
+    color: red;
+  }
+  
