@@ -1,0 +1,45 @@
+#root {
+    font-size: 24px;
+    width: 450px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #373b43;
+  }
+  
+  button {
+    font-size: 14px;
+    color: white;
+    font-weight: bold;
+  }
+  
+  #list {
+    list-style: none;
+    margin-bottom: 0;
+    padding-left: 0;
+  }
+  
+  #submit-button {
+    background-color: #f99f0e;
+    border: none;
+  }
+  
+  #new-item {
+    font-size: 24px;
+    color: white;
+    background-color: #696a6e;
+  }
+  
+  .item {
+    color: white;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .item button {
+    width: 70px;
+    background-color: #f99f0e;
+    border: none;
+  }
+  
