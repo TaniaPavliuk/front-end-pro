@@ -1,18 +1,18 @@
 const API_KEY = 'StAXM2VmTgFtwElaUDbGu5uzTNCXS5tH';
 
 const cities = {
-  Kyiv: '324505',
-  Lviv: '324561',
-  Kharkiv: '323903',
-  Chernihiv: '322162',
-  Poltava: '325523',
-  Zhytomyr: '326609',
-  Cherkasy: '321985',
-  Odesa: '325343',
-  Mariupol: '323037',
-  London: '328328',
-  Warsaw: '274663',
-  ['New York']: '349727',
+  kyiv: '324505',
+  lviv: '324561',
+  kharkiv: '323903',
+  chernihiv: '322162',
+  poltava: '325523',
+  zhytomyr: '326609',
+  cherkasy: '321985',
+  odesa: '325343',
+  mariupol: '323037',
+  london: '328328',
+  warsaw: '274663',
+  ['new york']: '349727',
 };
 
 const weatherResults = document.getElementById('weather-results');
@@ -56,7 +56,7 @@ function getWeather(cityCode) {
 const inputElement = document.getElementById('city-input');
 const buttonElement = document.getElementById('get-city-btn');
 buttonElement.addEventListener('click', () => {
-  const cityName = inputElement.value;
+  const cityName = inputElement.value.toLowerCase();
   const cityCode = cities[cityName];
   if (cityCode) {
     getWeather(cityCode);
