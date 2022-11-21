@@ -1,24 +1,15 @@
 const API_KEY = 'StAXM2VmTgFtwElaUDbGu5uzTNCXS5tH';
 
-const cities = {
-  kyiv: '324505',
-  lviv: '324561',
-  kharkiv: '323903',
-  chernihiv: '322162',
-  poltava: '325523',
-  zhytomyr: '326609',
-  cherkasy: '321985',
-  odesa: '325343',
-  mariupol: '323037',
-  london: '328328',
-  warsaw: '274663',
-  ['new york']: '349727',
-};
+const inputElement = document.getElementById('city-input');
+const buttonElement = document.getElementById('get-city-btn');
+const weatherResultsEl = document.getElementById('weather-results');
+const neighboursEl = document.getElementById('neighbours');
 
-const weatherResults = document.getElementById('weather-results');
+function renderWeather(allResults) {
+  const [results, neighbours] = allResults;
 
-function renderWeather(results) {
-  weatherResults.innerHTML = '';
+  weatherResultsEl.innerHTML = '';
+  neighboursEl.innerHTML = '';
 
   results.DailyForecasts.forEach((forecast) => {
     const dayElement = document.createElement('div');
@@ -35,32 +26,58 @@ function renderWeather(results) {
 
     dayElement.appendChild(dateElement);
     dayElement.appendChild(temperatureElement);
-    weatherResults.appendChild(dayElement);
+    weatherResultsEl.appendChild(dayElement);
+  });
+
+  neighbours.forEach((neighbourCity) => {
+    const cityButton = document.createElement('button');
+    cityButton.innerText = neighbourCity.LocalizedName;
+    cityButton.value = neighbourCity.Key;
+
+    neighboursEl.appendChild(cityButton);
   });
 }
 
-function getWeather(cityCode) {
-  const xhr = new XMLHttpRequest();
-
-  xhr.addEventListener('loadend', () => {
-    renderWeather(JSON.parse(xhr.response));
+async function getLocationKeyByCityName(cityName) {
+  const citiesFromSearch = await fetch(
+    `http://dataservice.accuweather.com/locations/v1/cities/search/?apikey=${API_KEY}&q=${cityName}`
+  ).then((response) => {
+    return response.json();
   });
 
-  xhr.open(
-    'GET',
-    `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${cityCode}?apikey=${API_KEY}&metric=true`
-  );
-  xhr.send();
+  return citiesFromSearch[0].Key;
 }
 
-const inputElement = document.getElementById('city-input');
-const buttonElement = document.getElementById('get-city-btn');
+async function getWeather(locationKey) {
+  const weatherResultsPromise = fetch(
+    `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationKey}?apikey=${API_KEY}&mertic=true`
+  ).then((response) => {
+    return response.json();
+  });
+
+  const neighboursResultsPromise = fetch(
+    `http://dataservice.accuweather.com/locations/v1/cities/neighbors/${locationKey}?apikey=${API_KEY}`
+  ).then((response) => {
+    return response.json();
+  });
+
+  return await Promise.all([weatherResultsPromise, neighboursResultsPromise]);
+}
+
 buttonElement.addEventListener('click', () => {
   const cityName = inputElement.value.toLowerCase();
-  const cityCode = cities[cityName];
-  if (cityCode) {
-    getWeather(cityCode);
-  } else {
-    weatherResults.innerText = 'No weather for this city';
+
+  if (cityName) {
+    getLocationKeyByCityName(cityName).then(getWeather).then(renderWeather);
+  }
+});
+
+neighboursEl.addEventListener('click', (event) => {
+  if (event.target.tagName === 'BUTTON') {
+    const locationKey = event.target.value;
+    const cityName = event.target.innerText;
+    inputElement.value = cityName;
+
+    getWeather(locationKey).then(renderWeather);
   }
 });
