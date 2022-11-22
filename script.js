@@ -1,4 +1,4 @@
-const API_KEY = 'StAXM2VmTgFtwElaUDbGu5uzTNCXS5tH';
+const API_KEY = 'K0TNJSRxnVYuWmnzFDRK57OXKpkdcBcw';
 
 const inputElement = document.getElementById('city-input');
 const buttonElement = document.getElementById('get-city-btn');
@@ -18,7 +18,7 @@ function renderWeather(allResults) {
     const dateElement = document.createElement('span');
     dateElement.classList.add('date');
     const date = new Date(forecast.Date);
-    dateElement.innerText = `${date.getDate()}.${date.getMonth()}`;
+    dateElement.innerText = `${date.getDate()}.${date.getMonth() + 1}`;
 
     const temperatureElement = document.createElement('span');
     temperatureElement.classList.add('temperature');
@@ -50,7 +50,7 @@ async function getLocationKeyByCityName(cityName) {
 
 async function getWeather(locationKey) {
   const weatherResultsPromise = fetch(
-    `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationKey}?apikey=${API_KEY}&mertic=true`
+    `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationKey}?apikey=${API_KEY}&metric=true`
   ).then((response) => {
     return response.json();
   });
@@ -64,11 +64,18 @@ async function getWeather(locationKey) {
   return await Promise.all([weatherResultsPromise, neighboursResultsPromise]);
 }
 
+function renderError() {
+  weatherResultsEl.innerHTML = 'Something went wrong';
+}
+
 buttonElement.addEventListener('click', () => {
   const cityName = inputElement.value.toLowerCase();
 
   if (cityName) {
-    getLocationKeyByCityName(cityName).then(getWeather).then(renderWeather);
+    getLocationKeyByCityName(cityName)
+      .then(getWeather)
+      .then(renderWeather)
+      .catch(renderError);
   }
 });
 
@@ -78,6 +85,6 @@ neighboursEl.addEventListener('click', (event) => {
     const cityName = event.target.innerText;
     inputElement.value = cityName;
 
-    getWeather(locationKey).then(renderWeather);
+    getWeather(locationKey).then(renderWeather).catch(renderError);
   }
 });
