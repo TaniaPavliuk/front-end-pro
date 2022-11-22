@@ -30,26 +30,13 @@ function renderResults(data) {
 
     itemTitleEl.innerText = movie.Title;
     itemMoreBtnEl.innerText = 'More';
-
-    itemMoreBtnEl.addEventListener('click', () => {
-      const titleEl = document.createElement('p');
-      const posterEl = document.createElement('img');
-
-      titleEl.innerText = `${movie.Title} - ${movie.Year}`;
-      posterEl.src = movie.Poster;
-
-      detailsEl.innerHTML = '';
-
-      detailsEl.appendChild(titleEl);
-      detailsEl.appendChild(posterEl);
-    });
+    itemMoreBtnEl.value = movie;
 
     itemEl.appendChild(itemTitleEl);
     itemEl.appendChild(itemMoreBtnEl);
 
     movieListEl.appendChild(itemEl);
   });
-  data.totalResults;
   const pages = Math.ceil(Number(data.totalResults) / RESULTS_PER_PAGE);
 
   paginationEl.innerHTML = '';
@@ -57,25 +44,71 @@ function renderResults(data) {
     const pageButtonEl = document.createElement('button');
 
     pageButtonEl.innerText = i;
-    pageButtonEl.addEventListener('click', () => {
-      currentPage = i;
-      getMovie(currentSearchValue, i).then(handleResponse);
-    });
+    pageButtonEl.value = i;
 
     paginationEl.appendChild(pageButtonEl);
   }
 }
 
-function getMovie(movieToFind, page = 1) {
-  return fetch(
-    `http://www.omdbapi.com/?apikey=${API_KEY}&s=${movieToFind}&page=${page}`
-  )
-    .then((response) => {
-      return response.json();
-    })
-    .catch((error) => {
-      console.log(error);
+function showDetails() {
+  detailsEl.classList.add('visible');
+}
+
+function hideDetails() {
+  detailsEl.classList.remove('visible');
+}
+
+function renderDetails(details) {
+  showDetails();
+  detailsEl.innerHTML = '';
+
+  const titleEl = document.createElement('p');
+  titleEl.innerText = `${details.Title} - ${details.Year}`;
+  detailsEl.appendChild(titleEl);
+
+  if (details.Poster === 'N/A') {
+    const picturePlaceholderEl = document.createElement('p');
+    picturePlaceholderEl.innerText = 'No picture for this movie';
+    detailsEl.appendChild(picturePlaceholderEl);
+  } else {
+    const posterEl = document.createElement('img');
+    posterEl.src = details.Poster;
+    detailsEl.appendChild(posterEl);
+  }
+}
+
+movieListEl.addEventListener('click', (event) => {
+  const { tagName, value } = event.target;
+
+  if (tagName === 'A') {
+    renderDetails(value);
+  }
+});
+
+paginationEl.addEventListener('click', (event) => {
+  const { tagName, value } = event.target;
+  if (tagName === 'BUTTON') {
+    hideDetails();
+    getMovie(currentSearchValue, value).then(handleResponse);
+  }
+});
+
+async function getMovie(movieToFind, page = 1) {
+  let response;
+
+  try {
+    response = await axios.get('http://www.omdbapi.com/', {
+      params: {
+        apikey: API_KEY,
+        s: movieToFind,
+        page,
+      },
     });
+  } catch (error) {
+    console.log(error);
+  }
+
+  return response.data;
 }
 
 function handleResponse(data) {
@@ -92,6 +125,7 @@ inputBtnEl.addEventListener('click', () => {
   const searchValue = searchInputEl.value;
   if (searchValue) {
     currentSearchValue = searchValue;
+    hideDetails();
     getMovie(searchValue).then(handleResponse);
   }
 });

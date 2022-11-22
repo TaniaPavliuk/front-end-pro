@@ -31,7 +31,11 @@ body {
 
 #details {
     padding: 30px;
+    display: none;
+}
 
+#details.visible {
+    display: block;
 }
 
 #movie-list {
